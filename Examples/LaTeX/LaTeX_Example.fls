@@ -1,6 +1,6 @@
-PWD c:\Users\maxwe\OneDrive\Desktop\GladiatorProjector\Balloon Project\Examples\LaTeX
+PWD c:\Users\maxwe\OneDrive\Desktop\Balloon\Examples\LaTeX
 INPUT C:\Users\maxwe\AppData\Local\MiKTeX\miktex\data\le\pdftex\pdflatex.fmt
-INPUT c:\Users\maxwe\OneDrive\Desktop\GladiatorProjector\Balloon Project\Examples\LaTeX\LaTeX_Example.tex
+INPUT c:\Users\maxwe\OneDrive\Desktop\Balloon\Examples\LaTeX\LaTeX_Example.tex
 OUTPUT LaTeX_Example.log
 INPUT C:\Users\maxwe\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Users\maxwe\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
