@@ -1,5 +1,5 @@
 
-# Balloon Calculator 0.1.1
+# Balloon Calculator 0.1.0
 ==========================================================================
 ## 4/7/2025
 
@@ -19,37 +19,8 @@
         - Created the 'LaTeX_Examples.tex' file
         - Created the 'Cpp_Examples.cpp' file
         - Created the 'Prof_Cpp_Examples.cpp' file
-
-### Changes
-- NA
-
-### Bug Fixes
-- NA
-
-
-
-# Balloon Calculator 0.1.0
-==========================================================================
-## 4/7/2025
-
-### Features
 - Added 'exampleCode.cpp' file
 - Added PIC to the program
-
-### Changes
-- Reorganized files to fit into the 'Baloon Project' folder
-- Removed 'docs.txt'
-
-### Bug Fixes
-- NA
-
-
-
-# Balloon Calculator 0.0.1
-==========================================================================
-## 4/2/2025
-
-### Features
 - Added 'Documentation' folder
     - Added 'changelogs.txt' file
     - Added 'todo.txt' file
@@ -59,7 +30,8 @@
     - Added '3-25-2025.txt'
 
 ### Changes
-- NA
+- Reorganized files to fit into the 'Baloon Project' folder
+- Removed 'docs.txt'
 
 ### Bug Fixes
 - NA
