@@ -1,0 +1,69 @@
+
+# Balloon Calculator 1.0.0
+==========================================================================
+## 4/14/2025
+
+### Features
+- Added 'main.cpp' 
+
+### Changes
+- NA
+
+### Bug Fixes
+- NA
+
+
+
+# Balloon Calculator 0.1.1
+==========================================================================
+## 4/14/2025
+
+### Features
+- Added 'Testing Folder'
+    - Added 'Testing Altitude.py'
+    - Added 'altitude_data.txt'
+
+### Changes
+- Modified 'testing.cpp'
+
+### Bug Fixes
+- NA
+
+
+
+# Balloon Calculator 0.1.0
+==========================================================================
+## 4/13/2025
+
+### IMPORTANT
+- The LaTeX file is locally rendered. It will not show on your end unless 
+  you are on GitHub (I believe). 
+- You can edit the document on your end though. 
+- Please only use the 'docs.tex' file.
+- In order to locally view the files, you need to use this link: 
+  https://www.youtube.com/watch?v=4lyHIQl4VM8&t=465s&ab_channel=FedericoTartarini
+
+### Features
+- Created the 'LaTeX' folder
+    - Created the 'docs.tex' file
+- Created the 'Examples' folder
+    - Created the 'LaTeX' folder
+        - Created the 'LaTeX_Examples.tex' file
+        - Created the 'Cpp_Examples.cpp' file
+        - Created the 'Prof_Cpp_Examples.cpp' file
+- Added 'exampleCode.cpp' file
+- Added PIC to the program
+- Added 'Documentation' folder
+    - Added 'changelogs.txt' file
+    - Added 'todo.txt' file
+    - Added 'docs.txt' file
+- Added 'main.cpp'
+- Added 'Meeting Notes' folder
+    - Added '3-25-2025.txt'
+
+### Changes
+- Reorganized files to fit into the 'Baloon Project' folder
+- Removed 'docs.txt'
+
+### Bug Fixes
+- NA
