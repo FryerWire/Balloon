@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.3) (preloaded format=pdflatex 2025.4.7)  13 APR 2025 14:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.3) (preloaded format=pdflatex 2025.4.7)  14 APR 2025 23:21
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**c:/Users/maxwe/OneDrive/Desktop/Balloon/Documentation/LaTeX/docs.tex
-(c:/Users/maxwe/OneDrive/Desktop/Balloon/Documentation/LaTeX/docs.tex
+**c:/Users/maxwe/OneDrive/Documents/PlatformIO/Projects/Balloon/Documentation/LaTeX/docs.tex
+(c:/Users/maxwe/OneDrive/Documents/PlatformIO/Projects/Balloon/Documentation/LaTeX/docs.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (C:\Users\maxwe\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
@@ -117,37 +117,59 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 5.
 LaTeX Font Info:    ... okay on input line 5.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
 LaTeX Font Info:    ... okay on input line 5.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 12.
- (C:\Users\maxwe\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Trying to load font information for U+msb on input line 12.
- (C:\Users\maxwe\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <14.4> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 7.
+
+Overfull \hbox (10.58147pt too wide) in paragraph at lines 7--7
+[]\OT1/cmr/bx/n/14.4 Altitude Data Pro-cess-ing with \OT1/cmtt/m/n/14.4 altitude[]data.py 
+ []
+
+
+Overfull \hbox (7.58463pt too wide) in paragraph at lines 41--42
+[]\OT1/cmtt/m/n/10 calculate[]statistics(data): \OT1/cmr/m/n/10 Com-putes sta-tis-ti-cal met-rics such as mean,
+ []
+
+
 
 [1
 
 {C:/Users/maxwe/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
+Overfull \hbox (19.83563pt too wide) in paragraph at lines 68--69
+[]\OT1/cmr/m/n/10 Added \OT1/cmtt/m/n/10 altitude[]data.py \OT1/cmr/m/n/10 and \OT1/cmtt/m/n/10 altitude[]data.txt \OT1/cmr/m/n/10 in the \OT1/cmtt/m/n/10 Altitude Testing/
+ []
 
-[2] (docs.aux)
+
+Overfull \hbox (27.72868pt too wide) in paragraph at lines 69--70
+[]\OT1/cmr/m/n/10 Added \OT1/cmtt/m/n/10 Adafruit[]Examples.cpp\OT1/cmr/m/n/10 , \OT1/cmtt/m/n/10 Cpp[]Example.cpp\OT1/cmr/m/n/10 , and \OT1/cmtt/m/n/10 Prof[]Cpp[]Example.cpp
+ []
+
+
+Overfull \hbox (10.72057pt too wide) in paragraph at lines 72--73
+[]\OT1/cmr/m/n/10 Added \OT1/cmtt/m/n/10 changelog.txt\OT1/cmr/m/n/10 , \OT1/cmtt/m/n/10 todo.txt\OT1/cmr/m/n/10 , and \OT1/cmtt/m/n/10 LaTeX/ \OT1/cmr/m/n/10 folder in the \OT1/cmtt/m/n/10 Documentation/
+ []
+
+
+
+[2]
+
+[3] (docs.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 1686 strings out of 473523
- 24231 string characters out of 5714631
- 413490 words of memory out of 5000000
- 24954 multiletter control sequences out of 15000+600000
- 562081 words of font info for 49 fonts, out of 8000000 for 9000
+ 1663 strings out of 473523
+ 23928 string characters out of 5714631
+ 415490 words of memory out of 5000000
+ 24941 multiletter control sequences out of 15000+600000
+ 561027 words of font info for 44 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 56i,6n,65p,280b,121s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <C:\Users\maxwe\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1000.pk><C:/Users/maxwe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/maxwe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/maxwe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/maxwe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/maxwe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb>
-Output written on docs.pdf (2 pages, 69417 bytes).
+ 56i,5n,65p,394b,198s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ <C:\Users\maxwe\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1000.pk><C:/Users/maxwe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/maxwe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/maxwe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/maxwe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/maxwe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on docs.pdf (3 pages, 82528 bytes).
 PDF statistics:
- 40 PDF objects out of 1000 (max. 8388607)
+ 42 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
