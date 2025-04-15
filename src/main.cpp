@@ -1,5 +1,5 @@
 
-#include <Adafruit_BMP280.h>  // For BMP280 sensor
+#include <Adafruit_BMP280.h>  // BMP280 Sensor from library
 #include <Wire.h>
 
 

@@ -35,7 +35,7 @@ void waitOneSecond() {
     It processes each line of the file, converting it to a float and passing it to the readAltitudeData function.
 */
 int main() {
-    std::ifstream inFile("C:\\Users\\maxwe\\OneDrive\\Desktop\\Balloon\\Testing\\altitude_data.txt");  // Absolute path to the file
+    std::ifstream inFile("C:\\Users\\maxwe\\OneDrive\\Documents\\PlatformIO\\Projects\\Balloon\\Altitude Testing\\altitude_data.txt");  // Absolute path to the file
     if (!inFile) {
         std::cerr << "Error: Could not open altitude_data.txt" << std::endl;
         return 1;
