@@ -1,64 +1,18 @@
+
 \documentclass{article}
 \usepackage{amsmath}
 \usepackage{amssymb}
 
+
+
 \begin{document}
 
-\section{Altitude Data Processing with \texttt{altitude\_data.py}}
-This document provides an overview of how the \texttt{altitude\_data.py} script processes altitude data for the Balloon project.
 
-\subsection{Overview}
-The \texttt{altitude\_data.py} script is designed to read, process, and analyze altitude data stored in a text file (\texttt{altitude\_data.txt}). It is a critical component of the Balloon project, enabling the evaluation of flight performance and environmental conditions.
-
-\subsection{Data Input}
-The script reads altitude data from a file named \texttt{altitude\_data.txt}. The data is expected to be in a structured format, with each line representing a single altitude measurement in meters. For example:
-\begin{verbatim}
-100
-150
-200
-250
-\end{verbatim}
-
-\subsection{Data Processing}
-The script processes the altitude data using the following steps:
-\begin{enumerate}
-    \item \textbf{File Reading:} The script opens \texttt{altitude\_data.txt} in read mode and loads the data into memory.
-    \item \textbf{Data Cleaning:} Any invalid or non-numeric entries are filtered out to ensure the integrity of the dataset.
-    \item \textbf{Statistical Analysis:} The script calculates key metrics such as:
-    \begin{itemize}
-        \item \textbf{Mean Altitude:} The average altitude across all measurements.
-        \item \textbf{Maximum Altitude:} The highest altitude recorded.
-        \item \textbf{Minimum Altitude:} The lowest altitude recorded.
-    \end{itemize}
-    \item \textbf{Visualization:} The script generates plots to visualize altitude trends over time, if applicable.
-\end{enumerate}
-
-\subsection{Key Functions}
-The following are the primary functions implemented in \texttt{altitude\_data.py}:
-\begin{itemize}
-    \item \texttt{read\_data(file\_path):} Reads altitude data from the specified file path.
-    \item \texttt{clean\_data(data):} Cleans and validates the input data.
-    \item \texttt{calculate\_statistics(data):} Computes statistical metrics such as mean, max, and min altitude.
-    \item \texttt{plot\_data(data):} Generates visualizations of the altitude data.
-\end{itemize}
-
-\subsection{Example Usage}
-To use the script, ensure that \texttt{altitude\_data.txt} is located in the same directory as \texttt{altitude\_data.py}. Then, run the script as follows:
-\begin{verbatim}
-python altitude_data.py
-\end{verbatim}
-The output will include statistical summaries and any generated plots.
-
-\subsection{Future Enhancements}
-Planned improvements for \texttt{altitude\_data.py} include:
-\begin{itemize}
-    \item Support for real-time altitude data streaming.
-    \item Integration with external APIs for weather and environmental data.
-    \item Enhanced visualization options, such as 3D plots.
-\end{itemize}
 
 \section{Changelog}
 This section provides a summary of changes made to the Balloon project.
+
+
 
 \subsection{Version 1.0.0 (4/14/2025)}
 \subsubsection{Features}
@@ -74,15 +28,21 @@ This section provides a summary of changes made to the Balloon project.
     \item Added \texttt{platformio.ini} for PlatformIO project configuration.
 \end{itemize}
 
+
+
 \subsubsection{Changes}
 \begin{itemize}
     \item Reorganized files into a structured folder hierarchy for better project management.
     \item Modified \texttt{testing.cpp} to include functionality for reading and processing altitude data from \texttt{altitude\_data.txt}.
 \end{itemize}
 
+
+
 \subsubsection{Bug Fixes}
 \begin{itemize}
     \item None.
 \end{itemize}
+
+
 
 \end{document}
