@@ -1,3 +1,4 @@
+
 \documentclass{article}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -62,8 +63,10 @@ The \texttt{main.cpp} file performs the following tasks:
     \end{itemize}
 \end{itemize}
 
+
 \subsection{Key Calculations}
 The highlighted section of the code calculates velocity, acceleration, and jerk using the following equations:
+
 
 \subsubsection{Velocity}
 Velocity is calculated as the change in altitude over time (\( \Delta t \)):
@@ -73,6 +76,8 @@ v_2 = \frac{\text{altitude}_2 - \text{altitude}_1}{\Delta t}, \quad
 v_3 = \frac{\text{altitude}_3 - \text{altitude}_2}{\Delta t}
 \]
 
+
+
 \subsubsection{Acceleration}
 Acceleration is calculated as the change in velocity over time (\( \Delta t \)):
 \[
@@ -80,11 +85,15 @@ a_1 = \frac{v_2 - v_1}{\Delta t}, \quad
 a_2 = \frac{v_3 - v_2}{\Delta t}
 \]
 
+
+
 \subsubsection{Jerk}
 Jerk is calculated as the change in acceleration over time (\( \Delta t \)):
 \[
 \text{jerk} = \frac{a_2 - a_1}{\Delta t}
 \]
+
+
 
 \subsection{LED Behavior}
 The LEDs are controlled based on the calculated jerk value:
@@ -93,6 +102,8 @@ The LEDs are controlled based on the calculated jerk value:
     \item \textbf{Negative jerk:} The red LED is turned on, and the green LED is turned off.
     \item \textbf{Zero jerk:} Both LEDs are turned off.
 \end{itemize}
+
+
 
 \subsection{Example Output}
 The \texttt{main.cpp} file outputs the current altitude and jerk value to the serial monitor in the following format:
