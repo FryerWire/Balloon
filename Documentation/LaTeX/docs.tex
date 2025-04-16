@@ -1,4 +1,3 @@
-
 \documentclass{article}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -41,6 +40,74 @@ This section provides a summary of changes made to the Balloon project.
 \subsubsection{Bug Fixes}
 \begin{itemize}
     \item None.
+\end{itemize}
+
+
+
+\section{\texttt{main.cpp} Overview}
+The \texttt{main.cpp} file is the core of the Balloon project, responsible for reading altitude data from the BMP280 sensor, processing it, and calculating key metrics such as velocity, acceleration, and jerk. It also controls the LED indicators based on the calculated jerk value.
+
+\subsection{Functionality}
+The \texttt{main.cpp} file performs the following tasks:
+\begin{itemize}
+    \item Initializes the BMP280 sensor and configures it for oversampling and filtering.
+    \item Reads altitude data from the BMP280 sensor at a 1 Hz sampling rate.
+    \item Processes the altitude data to calculate velocity, acceleration, and jerk.
+    \item Outputs the calculated jerk value to the serial monitor.
+    \item Controls the state of two LEDs based on the jerk value:
+    \begin{itemize}
+        \item Green LED: Indicates positive jerk.
+        \item Red LED: Indicates negative jerk.
+        \item Both LEDs off: Indicates zero jerk.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Key Calculations}
+The highlighted section of the code calculates velocity, acceleration, and jerk using the following equations:
+
+\subsubsection{Velocity}
+Velocity is calculated as the change in altitude over time (\( \Delta t \)):
+\[
+v_1 = \frac{\text{altitude}_1 - \text{altitude}_0}{\Delta t}, \quad
+v_2 = \frac{\text{altitude}_2 - \text{altitude}_1}{\Delta t}, \quad
+v_3 = \frac{\text{altitude}_3 - \text{altitude}_2}{\Delta t}
+\]
+
+\subsubsection{Acceleration}
+Acceleration is calculated as the change in velocity over time (\( \Delta t \)):
+\[
+a_1 = \frac{v_2 - v_1}{\Delta t}, \quad
+a_2 = \frac{v_3 - v_2}{\Delta t}
+\]
+
+\subsubsection{Jerk}
+Jerk is calculated as the change in acceleration over time (\( \Delta t \)):
+\[
+\text{jerk} = \frac{a_2 - a_1}{\Delta t}
+\]
+
+\subsection{LED Behavior}
+The LEDs are controlled based on the calculated jerk value:
+\begin{itemize}
+    \item \textbf{Positive jerk:} The green LED is turned on, and the red LED is turned off.
+    \item \textbf{Negative jerk:} The red LED is turned on, and the green LED is turned off.
+    \item \textbf{Zero jerk:} Both LEDs are turned off.
+\end{itemize}
+
+\subsection{Example Output}
+The \texttt{main.cpp} file outputs the current altitude and jerk value to the serial monitor in the following format:
+\begin{verbatim}
+Altitude: 250.00 | Jerk: 0.50
+\end{verbatim}
+
+This provides real-time feedback on the altitude and motion dynamics of the balloon.
+
+\subsection{Future Enhancements}
+Planned improvements for \texttt{main.cpp} include:
+\begin{itemize}
+    \item Adding error handling for sensor failures.
+    \item Supporting additional sensors for enhanced data collection.
+    \item Optimizing the LED control logic for energy efficiency.
 \end{itemize}
 
 
