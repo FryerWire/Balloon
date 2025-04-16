@@ -68,7 +68,7 @@ void loop() {
     It uses the delay function from the Arduino library to achieve this.
 */
 void waitOneSecond() {
-  delay(1000);  // 1-second delay (1000 ms)
+  delay(999);  // 1-second delay (1000 ms)
 }
 
 
