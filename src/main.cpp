@@ -1,5 +1,6 @@
 #include <Adafruit_LSM6DS33.h>
 #include <Adafruit_BMP280.h>
+#include <Adafruit_NeoPixel.h>
 #include <Wire.h>
 
 // Function Prototypes =====================================================================
@@ -12,6 +13,7 @@ void computeJerk(const float ax[], const float ay[], const float az[], float dt,
 // Global Objects ===========================================================================
 Adafruit_BMP280 bmp;
 Adafruit_LSM6DS33 lsm6ds33;
+Adafruit_NeoPixel pixel = Adafruit_NeoPixel(1, 18, NEO_GRB + NEO_KHZ800);  // RGB NeoPixel on pin D18
 
 // Global Variables =========================================================================
 float accelX[4] = {0}, accelY[4] = {0}, accelZ[4] = {0};
@@ -30,25 +32,20 @@ unsigned long internalClock = 0;
 // =========================================================================================
 void setup() {
   Serial.begin(115200);
-
-  // Wait for Serial Monitor to be fully connected (especially for PlatformIO)
-  while (!Serial) {
-    delay(10);
-  }
-
-  // Wait a bit more just to ensure terminal is fully open
+  while (!Serial) delay(10);
   delay(250);
 
-  // Initialize sensors silently
   bmp.begin(0x77);
   lsm6ds33.begin_I2C();
   lsm6ds33.setAccelRange(LSM6DS_ACCEL_RANGE_2_G);
   lsm6ds33.setAccelDataRate(LSM6DS_RATE_104_HZ);
 
+  pixel.begin();
+  pixel.show();  // Initialize NeoPixel to off
+
   lastTime = millis();
   internalClock = 0;
 
-  // CSV HEADER: now guaranteed to print
   Serial.println("Time [s], Internal Clock [ms], Altitude [m], Accel X [m/s^2], Accel Y [m/s^2], Accel Z [m/s^2], Jerk X [m/s^3], Jerk Y [m/s^3], Jerk Z [m/s^3]");
 }
 
@@ -81,7 +78,34 @@ void loop() {
   float jerkX, jerkY, jerkZ;
   computeJerk(accelX, accelY, accelZ, dt, jerkX, jerkY, jerkZ);
 
-  // Clean CSV Output
+  float percentChangeX = fabs(jerkX - prevJerkX) / max(fabs(prevJerkX), 0.01);
+  float percentChangeY = fabs(jerkY - prevJerkY) / max(fabs(prevJerkY), 0.01);
+  float percentChangeZ = fabs(jerkZ - prevJerkZ) / max(fabs(prevJerkZ), 0.01);
+
+  float threshold = 5.0;
+
+  if (fabs(jerkX) > threshold || fabs(jerkY) > threshold || fabs(jerkZ) > threshold) {
+    if (fabs(jerkX) >= fabs(jerkY) && fabs(jerkX) >= fabs(jerkZ)) {
+      pixel.setPixelColor(0, jerkX > 0 ? pixel.Color(255, 0, 0) : pixel.Color(0, 0, 255));  // X: Red / Blue
+    }
+    else if (fabs(jerkY) >= fabs(jerkX) && fabs(jerkY) >= fabs(jerkZ)) {
+      pixel.setPixelColor(0, jerkY > 0 ? pixel.Color(0, 255, 0) : pixel.Color(255, 255, 0));  // Y: Green / Yellow
+    }
+    else {
+      pixel.setPixelColor(0, jerkZ > 0 ? pixel.Color(128, 0, 128) : pixel.Color(255, 255, 255));  // Z: Purple / White
+    }
+  } else {
+    pixel.setPixelColor(0, pixel.Color(0, 255, 0));  // Stable = green
+  }
+  pixel.show();
+
+
+  
+
+  prevJerkX = jerkX;
+  prevJerkY = jerkY;
+  prevJerkZ = jerkZ;
+
   Serial.print(internalClock / 1000.0, 3); Serial.print(", ");
   Serial.print(internalClock); Serial.print(", ");
   Serial.print(altitude, 3); Serial.print(", ");
@@ -91,6 +115,15 @@ void loop() {
   Serial.print(jerkX, 3); Serial.print(", ");
   Serial.print(jerkY, 3); Serial.print(", ");
   Serial.println(jerkZ, 3);
+
+  Serial.print("LED: ");
+  if (percentChangeX > 10.0 || percentChangeY > 10.0 || percentChangeZ > 10.0) {
+    Serial.println("BLUE");
+  } else {
+    Serial.println("GREEN");
+  }
+
+
 
   delay(1000);
 }
@@ -105,14 +138,11 @@ float getAltitude() {
 
 bool getAcceleration() {
   sensors_event_t accel, gyro, temp;
-  if (!lsm6ds33.getEvent(&accel, &gyro, &temp)) {
-    return false;
-  }
+  if (!lsm6ds33.getEvent(&accel, &gyro, &temp)) return false;
 
   currAx = accel.acceleration.x;
   currAy = accel.acceleration.y;
   currAz = accel.acceleration.z;
-
   return true;
 }
 
