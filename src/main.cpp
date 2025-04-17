@@ -1,131 +1,126 @@
+#include <Adafruit_LSM6DS33.h>
+#include <Adafruit_BMP280.h>
+#include <Wire.h>
 
-#include <Adafruit_BMP280.h>       // For the BMP280 sensor
-#include <Adafruit_LSM6DS33.h>     // For the accelerometer/gyroscope
-#include <Adafruit_LIS3MDL.h>      // For the magnetometer
-#include <Adafruit_GFX.h>          // For graphics support
-#include <Adafruit_ST7789.h>       // For the TFT display
-#include <Adafruit_NeoPixel.h>     // For the NeoPixel LED
-#include <Wire.h>                  // For I2C communication
+// Function Prototypes =====================================================================
+float getAltitude();
+bool getAcceleration();
+void updateAccelHistory(float history[], float newVal);
+void computeJerk(const float ax[], const float ay[], const float az[], float dt,
+                 float &jerkX, float &jerkY, float &jerkZ);
 
+// Global Objects ===========================================================================
+Adafruit_BMP280 bmp;
+Adafruit_LSM6DS33 lsm6ds33;
 
-// Function Prototype =============================================================================
-void readAltitudeData(float currentAltitude);
-void waitOneSecond();
+// Global Variables =========================================================================
+float accelX[4] = {0}, accelY[4] = {0}, accelZ[4] = {0};
+float currAx = 0, currAy = 0, currAz = 0;
+int accelChecker = 0;
 
+unsigned long lastTime = 0;
+unsigned long internalClock = 0;
 
-
-// Global Objects and Constants ===================================================================
-Adafruit_BMP280 bmp; // Default I2C address is 0x77
-
-const int GREEN_LED_PIN = 1;
-const int RED_LED_PIN = 2;
-
-float fourPointAltitude[4] = {0};
-int fourPointChecker = 0;
-
-
-
-/*
-    setup function initializes the serial communication, sets up the LED pins, and initializes the BMP280 sensor.
-    It also configures the BMP280 sensor for oversampling and filtering.
-*/
+// =========================================================================================
+// SETUP ====================================================================================
+// =========================================================================================
 void setup() {
   Serial.begin(115200);
-  while (!Serial);  // Wait for serial to be ready
 
-  // Initialize LEDs
-  pinMode(GREEN_LED_PIN, OUTPUT);
-  pinMode(RED_LED_PIN, OUTPUT);
-  digitalWrite(GREEN_LED_PIN, LOW);
-  digitalWrite(RED_LED_PIN, LOW);
-
-  // Initialize BMP280
-  if (!bmp.begin(0x77)) {
-    Serial.println("Could not find BMP280 sensor!");
-    while (1);
+  // Wait for Serial Monitor to be fully connected (especially for PlatformIO)
+  while (!Serial) {
+    delay(10);
   }
 
-  // Optional: Configure oversampling for better accuracy
-  bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,
-                  Adafruit_BMP280::SAMPLING_X2,
-                  Adafruit_BMP280::SAMPLING_X16,
-                  Adafruit_BMP280::FILTER_X16,
-                  Adafruit_BMP280::STANDBY_MS_500);
+  // Wait a bit more just to ensure terminal is fully open
+  delay(250);
+
+  // Initialize sensors silently
+  bmp.begin(0x77);
+  lsm6ds33.begin_I2C();
+  lsm6ds33.setAccelRange(LSM6DS_ACCEL_RANGE_2_G);
+  lsm6ds33.setAccelDataRate(LSM6DS_RATE_104_HZ);
+
+  lastTime = millis();
+  internalClock = 0;
+
+  // CSV HEADER: now guaranteed to print
+  Serial.println("Time [s], Internal Clock [ms], Altitude [m], Accel X [m/s^2], Accel Y [m/s^2], Accel Z [m/s^2], Jerk X [m/s^3], Jerk Y [m/s^3], Jerk Z [m/s^3]");
 }
 
-
-
-/*
-    loop function continuously reads the altitude from the BMP280 sensor and processes it.
-    It calls the readAltitudeData function with the current altitude value and waits for 1 second before repeating.
-*/
+// =========================================================================================
+// LOOP =====================================================================================
+// =========================================================================================
 void loop() {
-  float altitude = bmp.readAltitude(1013.25);  // Replace with your known sea level pressure
-  readAltitudeData(altitude);
-  waitOneSecond();  // Sample at 1 Hz
-}
+  float altitude = getAltitude();
 
-
-
-/*
-    waitOneSecond function introduces a delay of 1 second (1000 milliseconds) to simulate a 1 Hz internal clock tick.
-    It uses the delay function from the Arduino library to achieve this.
-*/
-void waitOneSecond() {
-  delay(1000);  // 1-second delay (1000 ms)
-}
-
-
-
-/*
-    readAltitudeData function processes the current altitude value and calculates the jerk based on the last four altitude readings.
-    It also determines the LED state based on the calculated jerk value.
-*/
-void readAltitudeData(float currentAltitude) {
-  // Four Point Checkers ==========================================================================
-  for (int i = 0; i < 3; i++) {
-    fourPointAltitude[i] = fourPointAltitude[i + 1];
-  }
-
-  fourPointAltitude[3] = currentAltitude;
-
-  if (fourPointChecker < 4) {
-    fourPointChecker++;
-    Serial.println("Collecting the data");
-
+  if (!getAcceleration()) {
+    delay(1000);
     return;
   }
 
-  float dt = 1.0;
+  updateAccelHistory(accelX, currAx);
+  updateAccelHistory(accelY, currAy);
+  updateAccelHistory(accelZ, currAz);
 
-  // Jerk Calulcations ============================================================================
-  // Velocity -------------------------------------------------------------------------------------
-  float v1 = (fourPointAltitude[1] - fourPointAltitude[0]) / dt;
-  float v2 = (fourPointAltitude[2] - fourPointAltitude[1]) / dt;
-  float v3 = (fourPointAltitude[3] - fourPointAltitude[2]) / dt;
-
-  // Acceleration ---------------------------------------------------------------------------------
-  float a1 = (v2 - v1) / dt;
-  float a2 = (v3 - v2) / dt;
-
-  // Jerk -----------------------------------------------------------------------------------------
-  float jerk = (a2 - a1) / dt;
-
-
-  // Outputs ======================================================================================
-  // Output Results -------------------------------------------------------------------------------
-  Serial.print("Altitude: "); Serial.print(currentAltitude);
-  Serial.print(" | Jerk: "); Serial.println(jerk);
-
-  // LED Output -----------------------------------------------------------------------------------
-  if (jerk > 0) {
-    digitalWrite(GREEN_LED_PIN, HIGH);
-    digitalWrite(RED_LED_PIN, LOW);
-  } else if (jerk < 0) {
-    digitalWrite(GREEN_LED_PIN, LOW);
-    digitalWrite(RED_LED_PIN, HIGH);
-  } else {
-    digitalWrite(GREEN_LED_PIN, LOW);
-    digitalWrite(RED_LED_PIN, LOW);
+  if (accelChecker < 4) {
+    accelChecker++;
+    delay(1000);
+    return;
   }
+
+  unsigned long currentTime = millis();
+  float dt = (currentTime - lastTime) / 1000.0;
+  lastTime = currentTime;
+  internalClock += 1000;
+
+  float jerkX, jerkY, jerkZ;
+  computeJerk(accelX, accelY, accelZ, dt, jerkX, jerkY, jerkZ);
+
+  // Clean CSV Output
+  Serial.print(internalClock / 1000.0, 3); Serial.print(", ");
+  Serial.print(internalClock); Serial.print(", ");
+  Serial.print(altitude, 3); Serial.print(", ");
+  Serial.print(currAx, 3); Serial.print(", ");
+  Serial.print(currAy, 3); Serial.print(", ");
+  Serial.print(currAz, 3); Serial.print(", ");
+  Serial.print(jerkX, 3); Serial.print(", ");
+  Serial.print(jerkY, 3); Serial.print(", ");
+  Serial.println(jerkZ, 3);
+
+  delay(1000);
+}
+
+// =========================================================================================
+// HELPER FUNCTIONS ========================================================================
+// =========================================================================================
+
+float getAltitude() {
+  return bmp.readAltitude(1013.25);
+}
+
+bool getAcceleration() {
+  sensors_event_t accel, gyro, temp;
+  if (!lsm6ds33.getEvent(&accel, &gyro, &temp)) {
+    return false;
+  }
+
+  currAx = accel.acceleration.x;
+  currAy = accel.acceleration.y;
+  currAz = accel.acceleration.z;
+
+  return true;
+}
+
+void updateAccelHistory(float history[], float newVal) {
+  for (int i = 0; i < 3; ++i)
+    history[i] = history[i + 1];
+  history[3] = newVal;
+}
+
+void computeJerk(const float ax[], const float ay[], const float az[], float dt,
+                 float &jerkX, float &jerkY, float &jerkZ) {
+  jerkX = (ax[3] - ax[2]) / dt;
+  jerkY = (ay[3] - ay[2]) / dt;
+  jerkZ = (az[3] - az[2]) / dt;
 }
