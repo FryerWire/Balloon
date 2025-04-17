@@ -86,21 +86,16 @@ void loop() {
 
   if (fabs(jerkX) > threshold || fabs(jerkY) > threshold || fabs(jerkZ) > threshold) {
     if (fabs(jerkX) >= fabs(jerkY) && fabs(jerkX) >= fabs(jerkZ)) {
-      pixel.setPixelColor(0, jerkX > 0 ? pixel.Color(255, 0, 0) : pixel.Color(0, 0, 255));  // X: Red / Blue
+        pixel.setPixelColor(0, jerkX > 0 ? pixel.Color(255, 0, 0) : pixel.Color(0, 0, 255));  // X: Red / Blue
+    } else if (fabs(jerkY) >= fabs(jerkX) && fabs(jerkY) >= fabs(jerkZ)) {
+        pixel.setPixelColor(0, jerkY > 0 ? pixel.Color(0, 255, 0) : pixel.Color(255, 255, 0));  // Y: Green / Yellow
+    } else {
+        pixel.setPixelColor(0, jerkZ > 0 ? pixel.Color(128, 0, 128) : pixel.Color(255, 255, 255));  // Z: Purple / White
     }
-    else if (fabs(jerkY) >= fabs(jerkX) && fabs(jerkY) >= fabs(jerkZ)) {
-      pixel.setPixelColor(0, jerkY > 0 ? pixel.Color(0, 255, 0) : pixel.Color(255, 255, 0));  // Y: Green / Yellow
-    }
-    else {
-      pixel.setPixelColor(0, jerkZ > 0 ? pixel.Color(128, 0, 128) : pixel.Color(255, 255, 255));  // Z: Purple / White
-    }
-  } else {
-    pixel.setPixelColor(0, pixel.Color(0, 255, 0));  // Stable = green
-  }
-  pixel.show();
-
-
-  
+} else {
+    pixel.setPixelColor(0, pixel.Color(0, 0, 0));  // Turn off the NeoPixel
+}
+pixel.show();
 
   prevJerkX = jerkX;
   prevJerkY = jerkY;
@@ -114,16 +109,32 @@ void loop() {
   Serial.print(currAz, 3); Serial.print(", ");
   Serial.print(jerkX, 3); Serial.print(", ");
   Serial.print(jerkY, 3); Serial.print(", ");
-  Serial.println(jerkZ, 3);
+  Serial.print(jerkZ, 3); Serial.print(", ");
 
   Serial.print("LED: ");
-  if (percentChangeX > 10.0 || percentChangeY > 10.0 || percentChangeZ > 10.0) {
-    Serial.println("BLUE");
-  } else {
-    Serial.println("GREEN");
-  }
-
-
+  if (fabs(jerkX) > threshold || fabs(jerkY) > threshold || fabs(jerkZ) > threshold) {
+    if (fabs(jerkX) >= fabs(jerkY) && fabs(jerkX) >= fabs(jerkZ)) {
+        if (jerkX > 0) {
+            Serial.println("RED");
+        } else {
+            Serial.println("BLUE");
+        }
+    } else if (fabs(jerkY) >= fabs(jerkX) && fabs(jerkY) >= fabs(jerkZ)) {
+        if (jerkY > 0) {
+            Serial.println("GREEN");
+        } else {
+            Serial.println("YELLOW");
+        }
+    } else {
+        if (jerkZ > 0) {
+            Serial.println("PURPLE");
+        } else {
+            Serial.println("WHITE");
+        }
+    }
+} else {
+    Serial.println("OFF");
+}
 
   delay(1000);
 }
