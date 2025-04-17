@@ -7,6 +7,15 @@
 
 ### Features
 - Added acceleration and jerk logging
+- Added Lights for different color pairs from jerk values
+  Jerk >0
+    X = RED
+    Y = Green
+    Z = Purple
+  Jerk < 0
+    X = Blue
+    Y = Yello
+    Z = White
 
 ### Changes
 - NA
