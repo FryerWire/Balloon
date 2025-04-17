@@ -18,6 +18,10 @@ float accelX[4] = {0}, accelY[4] = {0}, accelZ[4] = {0};
 float currAx = 0, currAy = 0, currAz = 0;
 int accelChecker = 0;
 
+float prevJerkX = 0.0;
+float prevJerkY = 0.0;
+float prevJerkZ = 0.0;
+
 unsigned long lastTime = 0;
 unsigned long internalClock = 0;
 
