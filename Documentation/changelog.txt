@@ -3,6 +3,39 @@
 ==========================================================================
 
 ## Version 1.0.0
+### Date: 4/16/2025
+
+### Features
+- Added `Adafruit Clue` library to the `Balloon Project`
+- Added `adafruit/Adafruit Unified Sensor`
+- Added `adafruit/Adafruit BMP280 Library`
+- Added `adafruit/Adafruit LSM6DS`
+- Added `adafruit/Adafruit LIS3MDL`
+- Added `adafruit/Adafruit NeoPixel`
+- Added `adafruit/Adafruit GFX Library` 
+- Added `adafruit/Adafruit ST7735 Library`
+- Added `adafruit/Adafruit ST7789 Library`
+
+### Changes
+- Removed the `Adafruit Circuit Playground` library
+
+### Bug Fixes
+- NA
+
+### IMPORTANT
+- The LaTeX file is locally rendered. It will not show on your end unless 
+  you are on GitHub (I believe). 
+- You can edit the document on your end though. 
+- Please only use the 'docs.tex' file.
+- In order to locally view the files, you need to use this link: 
+  https://www.youtube.com/watch?v=4lyHIQl4VM8&t=465s&ab_channel=FedericoTartarini
+
+
+
+# Balloon Project Changelog
+==========================================================================
+
+## Version 1.0.0
 ### Date: 4/14/2025
 
 ### Features

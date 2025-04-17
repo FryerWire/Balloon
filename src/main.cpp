@@ -1,7 +1,11 @@
 
-#include <Adafruit_BMP280.h>  // BMP280 Sensor from library
-#include <Wire.h>
-
+#include <Adafruit_BMP280.h>       // For the BMP280 sensor
+#include <Adafruit_LSM6DS33.h>     // For the accelerometer/gyroscope
+#include <Adafruit_LIS3MDL.h>      // For the magnetometer
+#include <Adafruit_GFX.h>          // For graphics support
+#include <Adafruit_ST7789.h>       // For the TFT display
+#include <Adafruit_NeoPixel.h>     // For the NeoPixel LED
+#include <Wire.h>                  // For I2C communication
 
 
 // Function Prototype =============================================================================
@@ -13,8 +17,8 @@ void waitOneSecond();
 // Global Objects and Constants ===================================================================
 Adafruit_BMP280 bmp; // Default I2C address is 0x77
 
-#define GREEN_LED_PIN 1
-#define RED_LED_PIN 2
+const int GREEN_LED_PIN = 1;
+const int RED_LED_PIN = 2;
 
 float fourPointAltitude[4] = {0};
 int fourPointChecker = 0;
@@ -68,7 +72,7 @@ void loop() {
     It uses the delay function from the Arduino library to achieve this.
 */
 void waitOneSecond() {
-  delay(999);  // 1-second delay (1000 ms)
+  delay(1000);  // 1-second delay (1000 ms)
 }
 
 
