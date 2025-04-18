@@ -2,7 +2,7 @@
 # Balloon Project Changelog
 ==========================================================================
 
-## Version 2.1.0
+## Version 3.0.0
 ### Date: 4/17/2025
 
 ### Features
@@ -16,6 +16,7 @@
     - X = BLUE
     - Y = YELLOW
     - Z = WHITE
+- Added FIT file 
 
 ### Changes
 - Cleaned up all files for better organization.
