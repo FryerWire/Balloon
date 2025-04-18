@@ -2,23 +2,24 @@
 # Balloon Project Changelog
 ==========================================================================
 
-## Version 2.0.0
-### Date: 4/16/2025
+## Version 2.1.0
+### Date: 4/17/2025
 
 ### Features
-- Added acceleration and jerk logging
-- Added Lights for different color pairs from jerk values
-  Jerk >0
-    X = RED
-    Y = Green
-    Z = Purple
-  Jerk < 0
-    X = Blue
-    Y = Yello
-    Z = White
+- Added acceleration and jerk logging.
+- Added lights for different color pairs based on jerk values:
+  - **Jerk > 0**:
+    - X = RED
+    - Y = GREEN
+    - Z = PURPLE
+  - **Jerk < 0**:
+    - X = BLUE
+    - Y = YELLOW
+    - Z = WHITE
 
 ### Changes
-- NA
+- Cleaned up all files for better organization.
+
 ### Bug Fixes
 - NA
 
