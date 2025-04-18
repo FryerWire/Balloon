@@ -20,7 +20,6 @@
 // Function Prototypes =====================================================================
 float getAltitude();
 bool getAcceleration();
-void scanI2CDevices();
 void updateAccelHistory(float history[], float newVal);
 void computeJerk(const float ax[], const float ay[], const float az[], float dt, float &jerkX, float &jerkY, float &jerkZ);
 
@@ -50,42 +49,23 @@ unsigned long internalClock = 0;                          // Internal clock for 
     It also sets the accelerometer range and data rate, and initializes the NeoPixel to off.
 */
 void setup() {
-    Serial.begin(115200);
-    while (!Serial) delay(10);
+  Serial.begin(115200);
+  while (!Serial) delay(10);
+  delay(250);
 
-    // Initialize I2C -----------------------------------------------------------------------------
-    Wire.begin();
-    scanI2CDevices();
+  bmp.begin(0x77);                                 // Initialize BMP280 sensor
+  lsm6ds33.begin_I2C();                            // Initialize LSM6DS33 sensor
+  lsm6ds33.setAccelRange(LSM6DS_ACCEL_RANGE_2_G);  // Set accelerometer range
+  lsm6ds33.setAccelDataRate(LSM6DS_RATE_104_HZ);   // Set accelerometer data rate
 
-    // Check LSM6DS33 -----------------------------------------------------------------------------
-    if (!lsm6ds33.begin_I2C()) {
-        Serial.println("Failed to initialize LSM6DS33!");
-    } else {
-        Serial.println("LSM6DS33 initialized successfully!");
-    }
+  pixel.begin();  // Initialize NeoPixel
+  pixel.show();   // Turn off NeoPixel
 
-    // Check BMP280 -------------------------------------------------------------------------------
-    if (!bmp.begin(0x77)) {
-        Serial.println("Failed to initialize BMP280!");
-    } else {
-        Serial.println("BMP280 initialized successfully!");
-    }
+  lastTime = millis();  // Initialize timing variables
+  internalClock = 0;
 
-    // Check NeoPixel -----------------------------------------------------------------------------
-    pixel.begin();
-    pixel.show();
-    pixel.setPixelColor(0, pixel.Color(255, 0, 0));  // Test with red
-    pixel.show();
-    delay(500);
-    pixel.setPixelColor(0, pixel.Color(0, 0, 0));    // Turn off
-    pixel.show();
-    Serial.println("NeoPixel test complete!");
-
-    lastTime = millis();                             // Initialize timing variables
-    internalClock = 0;
-
-    // Print header for Serial Monitor logging
-    Serial.println("Time [s], Altitude [m], Accel X [m/s^2], Accel Y [m/s^2], Accel Z [m/s^2], Jerk X [m/s^3], Jerk Y [m/s^3], Jerk Z [m/s^3]");
+  // Print header for Serial Monitor logging
+  Serial.println("Time [s], Internal Clock [ms], Altitude [m], Accel X [m/s^2], Accel Y [m/s^2], Accel Z [m/s^2], Jerk X [m/s^3], Jerk Y [m/s^3], Jerk Z [m/s^3]");
 }
 
 
@@ -124,14 +104,14 @@ void loop() {
       return;
     }
 
-    float dt = (currentTime - lastTime) / 1000.0;                  // Calculate time interval in seconds
+    float dt = (currentTime - lastTime) / 1000.0;  // Calculate time interval in seconds
     lastTime = currentTime; 
     internalClock += 1000;
 
     float jerkX, jerkY, jerkZ;
     computeJerk(accelX, accelY, accelZ, dt, jerkX, jerkY, jerkZ);  // Compute jerk values
 
-    float threshold = 1.0;                                         // Jerk threshold for LED activation
+    float threshold = 1.0;  // Jerk threshold for LED activation
 
     // Control NeoPixel LED based on jerk values --------------------------------------------------
     if (fabs(jerkX) > threshold || fabs(jerkY) > threshold || fabs(jerkZ) > threshold) {
@@ -157,51 +137,43 @@ void loop() {
       lastLogTime = currentTime;
 
       Serial.print(internalClock / 1000.0, 3); Serial.print(", ");
+      Serial.print(internalClock); Serial.print(", ");
       Serial.print(altitude, 3); Serial.print(", ");
       Serial.print(currAx, 3); Serial.print(", ");
       Serial.print(currAy, 3); Serial.print(", ");
       Serial.print(currAz, 3); Serial.print(", ");
       Serial.print(jerkX, 3); Serial.print(", ");
       Serial.print(jerkY, 3); Serial.print(", ");
-      Serial.print(jerkZ, 3); Serial.println(", ");
+      Serial.print(jerkZ, 3); Serial.print(", ");
+
+      Serial.print("LED: ");
+      if (fabs(jerkX) > threshold || fabs(jerkY) > threshold || fabs(jerkZ) > threshold) {
+        if (fabs(jerkX) >= fabs(jerkY) && fabs(jerkX) >= fabs(jerkZ)) {
+          if (jerkX > 0) {
+            Serial.print("RED");
+          } else {
+            Serial.print("BLUE");
+          }
+        } else if (fabs(jerkY) >= fabs(jerkX) && fabs(jerkY) >= fabs(jerkZ)) {
+          if (jerkY > 0) {
+            Serial.print("GREEN");
+          } else {
+            Serial.print("YELLOW");
+          }
+        } else {
+          if (jerkZ > 0) {
+            Serial.print("PURPLE");
+          } else {
+            Serial.print("WHITE");
+          }
+        }
+      } else {
+        Serial.print("OFF");
+      }
+
+      Serial.print(", THRESHOLD: ");
+      Serial.println(threshold, 2);  
     }
-  }
-}
-
-
-
-/*
-    scanI2CDevices() - Scans the I2C bus for connected devices and prints their addresses.
-*/
-void scanI2CDevices() {
-  // Scan I2C devices -----------------------------------------------------------------------------
-  Serial.println("Scanning I2C bus for devices...");
-  byte error, address;
-  int nDevices = 0;
-
-  // Try to find any devices on the I2C bus -------------------------------------------------------
-  for (address = 1; address < 127; address++) {
-    Wire.beginTransmission(address);
-    error = Wire.endTransmission();
-
-    if (error == 0) {
-      Serial.print("I2C device found at address 0x");
-      if (address < 16) Serial.print("0");
-      Serial.print(address, HEX);
-      Serial.println(" !");
-      nDevices++;
-    } else if (error == 4) {
-      Serial.print("Unknown error at address 0x");
-      if (address < 16) Serial.print("0");
-      Serial.println(address, HEX);
-    }
-  }
-
-  // Print the number of devices found on the I2C bus ---------------------------------------------
-  if (nDevices == 0) {
-    Serial.println("No I2C devices found\n");
-  } else {
-    Serial.println("done\n");
   }
 }
 
