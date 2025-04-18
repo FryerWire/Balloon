@@ -9,13 +9,13 @@
 
 
 
-#include <Adafruit_LSM6DS33.h>  // LSM6DS33 6-DoF Accelerometer and Gyroscope
-#include <Adafruit_BMP280.h>    // BMP280 Barometric Pressure Sensor
-#include <Adafruit_NeoPixel.h>  // NeoPixel RGB LED
-#include <Wire.h>               // I2C library
-#include <Adafruit_SPIFlash.h>  // QSPI Flash library
-#include <SdFat.h>              // FAT filesystem
-#include <Adafruit_FlashTransport.h> // Flash transport layer
+#include <Adafruit_LSM6DS33.h>        // LSM6DS33 6-DoF Accelerometer and Gyroscope
+#include <Adafruit_BMP280.h>          // BMP280 Barometric Pressure Sensor
+#include <Adafruit_NeoPixel.h>        // NeoPixel RGB LED
+#include <Wire.h>                     // I2C library
+#include <Adafruit_SPIFlash.h>        // QSPI Flash library
+#include <SdFat.h>                    // FAT filesystem
+#include <Adafruit_FlashTransport.h>  // Flash transport layer
 
 
 
@@ -32,11 +32,10 @@ void computeJerk(const float ax[], const float ay[], const float az[], float dt,
 Adafruit_BMP280 bmp;                                                       // BMP280 sensor object
 Adafruit_LSM6DS33 lsm6ds33;                                                // LSM6DS33 sensor object
 Adafruit_NeoPixel pixel = Adafruit_NeoPixel(1, 18, NEO_GRB + NEO_KHZ800);  // NeoPixel LED
-
-Adafruit_FlashTransport_QSPI flashTransport;
-Adafruit_SPIFlash flash(&flashTransport);
-FatFileSystem fatfs;
-#define FILE_NAME "datalog.csv"
+Adafruit_FlashTransport_QSPI flashTransport;                               // QSPI Flash transport layer
+Adafruit_SPIFlash flash(&flashTransport);                                  // QSPI Flash object
+FatFileSystem fatfs;                                                       // FAT filesystem object
+const char FILE_NAME[] = "datalog.csv";                                    // File name for logging data
 File dataFile;
 
 
