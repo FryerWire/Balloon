@@ -1,4 +1,3 @@
-
 \documentclass{article}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -121,6 +120,58 @@ Planned improvements for \texttt{main.cpp} include:
     \item Optimizing the LED control logic for energy efficiency.
 \end{itemize}
 
+\section{Balloon Project Report}
 
+\subsection{Overview}
+The Balloon Project is a program designed to collect and analyze data from a weather balloon. It utilizes sensors to measure altitude and acceleration, calculates the rate of change of acceleration (jerk) in three axes (X, Y, Z), and controls a NeoPixel LED to visually represent the jerk values. The program also logs the collected data to a CSV file and outputs it to the Serial Monitor for further analysis.
+
+\subsection{Key Features}
+\begin{itemize}
+    \item Reads altitude data from a BMP280 barometric pressure sensor.
+    \item Reads acceleration data from an LSM6DS33 accelerometer.
+    \item Calculates jerk values for the X, Y, and Z axes.
+    \item Controls a NeoPixel LED to display colors based on the direction and magnitude of jerk:
+    \begin{itemize}
+        \item X-axis: Red (positive) / Blue (negative)
+        \item Y-axis: Green (positive) / Yellow (negative)
+        \item Z-axis: Purple (positive) / White (negative)
+    \end{itemize}
+    \item Logs data to a CSV file on a QSPI flash filesystem.
+    \item Outputs data to the Serial Monitor for real-time monitoring.
+\end{itemize}
+
+\subsection{Code Functionality}
+\begin{enumerate}
+    \item \textbf{Setup:} The \texttt{setup()} function initializes the I2C bus, sensors (BMP280 and LSM6DS33), NeoPixel LED, and QSPI flash filesystem. It also prepares the CSV file for data logging and prints a header to the Serial Monitor.
+    \item \textbf{Main Loop:} The \texttt{loop()} function performs the following tasks:
+    \begin{itemize}
+        \item Reads altitude and acceleration data.
+        \item Updates acceleration history arrays for each axis.
+        \item Ensures sufficient data points are collected before calculating jerk.
+        \item Computes jerk values using the \texttt{computeJerk()} function.
+        \item Controls the NeoPixel LED based on jerk values and a predefined threshold.
+        \item Logs data to the Serial Monitor and the CSV file.
+    \end{itemize}
+    \item \textbf{Helper Functions:}
+    \begin{itemize}
+        \item \texttt{scanI2CDevices()}: Scans the I2C bus for connected devices and prints their addresses.
+        \item \texttt{getAltitude()}: Reads and returns the altitude from the BMP280 sensor.
+        \item \texttt{getAcceleration()}: Reads acceleration data from the LSM6DS33 sensor and updates global variables for the current acceleration values.
+        \item \texttt{updateAccelHistory()}: Updates the history arrays for acceleration values by shifting old values and adding new ones.
+        \item \texttt{computeJerk()}: Calculates the jerk values for each axis based on the acceleration history and time interval.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Data Logging}
+The program logs the following data to both the Serial Monitor and a CSV file:
+\begin{itemize}
+    \item Time (seconds)
+    \item Altitude (meters)
+    \item Acceleration values for X, Y, and Z axes (m/s\textsuperscript{2})
+    \item Jerk values for X, Y, and Z axes (m/s\textsuperscript{3})
+\end{itemize}
+
+\subsection{Conclusion}
+This program provides a robust framework for collecting, analyzing, and visualizing data from a weather balloon. The use of sensors, real-time data logging, and visual feedback via the NeoPixel LED makes it a versatile tool for atmospheric data collection and analysis.
 
 \end{document}
