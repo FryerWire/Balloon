@@ -1,4 +1,3 @@
-
 /*
     Balloon Project - Main Program
     This program reads data from an LSM6DS33 accelerometer and a BMP280 barometric pressure sensor.
@@ -14,6 +13,9 @@
 #include <Adafruit_BMP280.h>    // BMP280 Barometric Pressure Sensor
 #include <Adafruit_NeoPixel.h>  // NeoPixel RGB LED
 #include <Wire.h>               // I2C library
+#include <Adafruit_SPIFlash.h>  // QSPI Flash library
+#include <SdFat.h>              // FAT filesystem
+#include <Adafruit_FlashTransport.h> // Flash transport layer
 
 
 
@@ -30,6 +32,12 @@ void computeJerk(const float ax[], const float ay[], const float az[], float dt,
 Adafruit_BMP280 bmp;                                                       // BMP280 sensor object
 Adafruit_LSM6DS33 lsm6ds33;                                                // LSM6DS33 sensor object
 Adafruit_NeoPixel pixel = Adafruit_NeoPixel(1, 18, NEO_GRB + NEO_KHZ800);  // NeoPixel LED
+
+Adafruit_FlashTransport_QSPI flashTransport;
+Adafruit_SPIFlash flash(&flashTransport);
+FatFileSystem fatfs;
+#define FILE_NAME "datalog.csv"
+File dataFile;
 
 
 
@@ -83,6 +91,29 @@ void setup() {
 
     lastTime = millis();                             // Initialize timing variables
     internalClock = 0;
+
+    // Initialize QSPI Flash ----------------------------------------------------------------------
+    if (!flash.begin()) {
+        Serial.println("Flash initialization failed!");
+        while (1);
+    }
+
+    // Mount the filesystem -----------------------------------------------------------------------
+    if (!fatfs.begin(&flash)) {
+        Serial.println("Failed to mount internal flash filesystem!");
+        while (1);
+    }
+
+    // Open or create the data file and write CSV header if it's a new file -----------------------
+    if (!fatfs.exists(FILE_NAME)) {
+        dataFile = fatfs.open(FILE_NAME, FILE_WRITE);
+        if (dataFile) {
+            dataFile.println("Time [s], Altitude [m], Accel X [m/s^2], Accel Y [m/s^2], Accel Z [m/s^2], Jerk X [m/s^3], Jerk Y [m/s^3], Jerk Z [m/s^3]");
+            dataFile.close();
+        }
+    }
+
+    Serial.println("Flash filesystem initialized and ready.");
 
     // Print header for Serial Monitor logging
     Serial.println("Time [s], Altitude [m], Accel X [m/s^2], Accel Y [m/s^2], Accel Z [m/s^2], Jerk X [m/s^3], Jerk Y [m/s^3], Jerk Z [m/s^3]");
@@ -164,6 +195,21 @@ void loop() {
       Serial.print(jerkX, 3); Serial.print(", ");
       Serial.print(jerkY, 3); Serial.print(", ");
       Serial.print(jerkZ, 3); Serial.println(", ");
+
+      dataFile = fatfs.open(FILE_NAME, FILE_WRITE);
+      if (dataFile) {
+        dataFile.print(internalClock / 1000.0, 3); dataFile.print(", ");
+        dataFile.print(altitude, 3); dataFile.print(", ");
+        dataFile.print(currAx, 3); dataFile.print(", ");
+        dataFile.print(currAy, 3); dataFile.print(", ");
+        dataFile.print(currAz, 3); dataFile.print(", ");
+        dataFile.print(jerkX, 3); dataFile.print(", ");
+        dataFile.print(jerkY, 3); dataFile.print(", ");
+        dataFile.print(jerkZ, 3); dataFile.println();
+        dataFile.close();
+      } else {
+        Serial.println("Failed to open datalog file for writing.");
+      }
     }
   }
 }
