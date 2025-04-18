@@ -1,9 +1,47 @@
+# Balloon Project Documentation Report
+==========================================================================
+
+## Version 3.0.0
+### Date: 4/18/2025
+
+### Features
+- Added detailed documentation for the Balloon Project in `docs.tex`.
+- Explained the purpose and functionality of the project:
+  - Collects altitude and acceleration data.
+  - Calculates jerk values for X, Y, and Z axes.
+  - Controls NeoPixel LED colors based on jerk values.
+  - Logs data to a CSV file and outputs to the Serial Monitor.
+- Documented key features, including:
+  - Altitude measurement using BMP280.
+  - Acceleration and jerk calculation using LSM6DS33.
+  - NeoPixel LED color mapping for jerk values.
+  - Data logging and real-time monitoring.
+- Provided an overview of helper functions:
+  - `scanI2CDevices()`, `getAltitude()`, `getAcceleration()`, `updateAccelHistory()`, and `computeJerk()`.
+
+### Changes
+- Organized the documentation into sections for better readability:
+  - Overview, Key Features, Code Functionality, Data Logging, and Conclusion.
+- Improved clarity and formatting for LaTeX rendering.
+
+### Bug Fixes
+- NA
+
+### IMPORTANT
+- The LaTeX file is locally rendered. It will not show on your end unless 
+  you are on GitHub (I believe). 
+- You can edit the document on your end though.   
+- Please only use the 'docs.tex' file.
+- In order to locally view the files, you need to use this link: 
+  https://www.youtube.com/watch?v=4lyHIQl4VM8&t=465s&ab_channel=FedericoTartarini
+
+
 
 # Balloon Project Changelog
 ==========================================================================
 
 ## Version 3.0.0
-### Date: 4/17/2025
+### Date: 4/18/2025
 
 ### Features
 - Added acceleration and jerk logging.
