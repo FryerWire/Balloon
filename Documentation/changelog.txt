@@ -26,7 +26,7 @@
 ### IMPORTANT
 - The LaTeX file is locally rendered. It will not show on your end unless 
   you are on GitHub (I believe). 
-- You can edit the document on your end though. 
+- You can edit the document on your end though.   
 - Please only use the 'docs.tex' file.
 - In order to locally view the files, you need to use this link: 
   https://www.youtube.com/watch?v=4lyHIQl4VM8&t=465s&ab_channel=FedericoTartarini
