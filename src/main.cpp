@@ -17,7 +17,7 @@
 
 
 
-// Function Prototypes =====================================================================
+// Function Prototypes ============================================================================
 float getAltitude();
 bool getAcceleration();
 void scanI2CDevices();
@@ -26,14 +26,14 @@ void computeJerk(const float ax[], const float ay[], const float az[], float dt,
 
 
 
-// Global Objects ==========================================================================
+// Global Objects =================================================================================
 Adafruit_BMP280 bmp;                                                       // BMP280 sensor object
 Adafruit_LSM6DS33 lsm6ds33;                                                // LSM6DS33 sensor object
 Adafruit_NeoPixel pixel = Adafruit_NeoPixel(1, 18, NEO_GRB + NEO_KHZ800);  // NeoPixel LED
 
 
 
-// Global Variables ========================================================================
+// Global Variables ===============================================================================
 float accelX[4] = {0}, accelY[4] = {0}, accelZ[4] = {0};  // Acceleration history arrays
 float currAx = 0, currAy = 0, currAz = 0;                 // Current acceleration values
 float prevJerkX = 0.0, prevJerkY = 0.0, prevJerkZ = 0.0;  // Previous jerk values
