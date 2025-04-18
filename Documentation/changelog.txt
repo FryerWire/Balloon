@@ -40,41 +40,6 @@
 # Balloon Project Changelog
 ==========================================================================
 
-## Version 3.0.0
-### Date: 4/18/2025
-
-### Features
-- Added acceleration and jerk logging.
-- Added lights for different color pairs based on jerk values:
-  - **Jerk > 0**:
-    - X = RED
-    - Y = GREEN
-    - Z = PURPLE
-  - **Jerk < 0**:
-    - X = BLUE
-    - Y = YELLOW
-    - Z = WHITE
-- Added FIT file 
-
-### Changes
-- Cleaned up all files for better organization.
-
-### Bug Fixes
-- NA
-
-### IMPORTANT
-- The LaTeX file is locally rendered. It will not show on your end unless 
-  you are on GitHub (I believe). 
-- You can edit the document on your end though.   
-- Please only use the 'docs.tex' file.
-- In order to locally view the files, you need to use this link: 
-  https://www.youtube.com/watch?v=4lyHIQl4VM8&t=465s&ab_channel=FedericoTartarini
-
-
-
-# Balloon Project Changelog
-==========================================================================
-
 ## Version 2.0.0
 ### Date: 4/16/2025
 
