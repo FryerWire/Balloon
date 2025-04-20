@@ -12,8 +12,8 @@ from matplotlib import pyplot as plt
 
 
 # CSV Data Loading and Labeling ===================================================================
-# Read the CSV file and Assign Column Names -------------------------------------------------------
-filename = 'old_sensor_data.csv'
+# Read the CSV file and Assign Column Names --------9-----------------------------------------------
+filename = 'Static Data.csv'
 df = pd.read_csv(filename)
 df.columns = [
     "Time [s]", "Altitude [m]", "Pressure [Pa]", "Temperature [K]",
