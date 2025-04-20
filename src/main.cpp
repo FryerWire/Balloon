@@ -1,4 +1,3 @@
-
 /*
     Balloon Project - Main Program
     This program reads data from an LSM6DS33 accelerometer and a BMP280 barometric pressure sensor.
@@ -113,7 +112,7 @@ void setup() {
     dataFile = fatfs.open(FILE_NAME, FILE_WRITE);
     if (dataFile) {
         dataFile.println("Time [s], Altitude [m], Pressure [Pa], Temperature [K], Accel X [m/s^2], Accel Y [m/s^2], Accel Z [m/s^2], Jerk X [m/s^3], Jerk Y [m/s^3], Jerk Z [m/s^3]");
-        dataFile.close();
+        dataFile.flush();
         Serial.println("Test.csv created and header written.");
     } else {
         Serial.println("Failed to create Test.csv.");
@@ -209,7 +208,6 @@ void loop() {
       Serial.print(jerkZ, 3); Serial.println();
 
 
-      dataFile = fatfs.open(FILE_NAME, FILE_WRITE);
       if (dataFile) {
           dataFile.print(internalClock / 1000.0, 3); dataFile.print(", ");
           dataFile.print(altitude, 3); dataFile.print(", ");
@@ -221,9 +219,7 @@ void loop() {
           dataFile.print(jerkX, 3); dataFile.print(", ");
           dataFile.print(jerkY, 3); dataFile.print(", ");
           dataFile.print(jerkZ, 3); dataFile.println();
-          dataFile.close();
-      } else {
-          Serial.println("Failed to open datalog file for writing.");
+          dataFile.flush();
       }
     }
   }
