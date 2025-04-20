@@ -105,18 +105,17 @@ void setup() {
 
     // Open or create the data file and write CSV header if it's a new file -----------------------
     if (!fatfs.exists(FILE_NAME)) {
-      dataFile = fatfs.open(FILE_NAME, FILE_WRITE);
-      if (dataFile) {
-          dataFile.println("Time [s], Altitude [m], Pressure [Pa], Temperature [K], Accel X [m/s^2], Accel Y [m/s^2], Accel Z [m/s^2], Jerk X [m/s^3], Jerk Y [m/s^3], Jerk Z [m/s^3]");
-          dataFile.close();
-      }
+        dataFile = fatfs.open(FILE_NAME, FILE_WRITE);
+        if (dataFile) {
+            dataFile.println("Time [s], Altitude [m], Accel X [m/s^2], Accel Y [m/s^2], Accel Z [m/s^2], Jerk X [m/s^3], Jerk Y [m/s^3], Jerk Z [m/s^3]");
+            dataFile.close();
+        }
     }
-
 
     Serial.println("Flash filesystem initialized and ready.");
 
     // Print header for Serial Monitor logging
-    Serial.println("Time [s], Altitude [m], Pressure [Pa], Temperature [K], Accel X [m/s^2], Accel Y [m/s^2], Accel Z [m/s^2], Jerk X [m/s^3], Jerk Y [m/s^3], Jerk Z [m/s^3]");
+    Serial.println("Time [s], Altitude [m], Accel X [m/s^2], Accel Y [m/s^2], Accel Z [m/s^2], Jerk X [m/s^3], Jerk Y [m/s^3], Jerk Z [m/s^3]");
 }
 
 
@@ -137,10 +136,7 @@ void loop() {
   if (currentTime - lastUpdateTime >= updateInterval) {
     lastUpdateTime = currentTime;
 
-    float altitude = getAltitude();                      // Altitude from BMP280
-    float pressure = bmp.readPressure();                 // Pressure in [Pa]
-    float temperature = bmp.readTemperature() + 273.15;  // Temperature in [K]
-
+    float altitude = getAltitude();  // Get altitude from BMP280
 
     // Get acceleration data from LSM6DS33 --------------------------------------------------------
     if (!getAcceleration()) {  
@@ -192,31 +188,26 @@ void loop() {
 
       Serial.print(internalClock / 1000.0, 3); Serial.print(", ");
       Serial.print(altitude, 3); Serial.print(", ");
-      Serial.print(pressure, 2); Serial.print(", ");
-      Serial.print(temperature, 2); Serial.print(", ");
       Serial.print(currAx, 3); Serial.print(", ");
       Serial.print(currAy, 3); Serial.print(", ");
       Serial.print(currAz, 3); Serial.print(", ");
       Serial.print(jerkX, 3); Serial.print(", ");
       Serial.print(jerkY, 3); Serial.print(", ");
-      Serial.print(jerkZ, 3); Serial.println();
-
+      Serial.print(jerkZ, 3); Serial.println(", ");
 
       dataFile = fatfs.open(FILE_NAME, FILE_WRITE);
       if (dataFile) {
-          dataFile.print(internalClock / 1000.0, 3); dataFile.print(", ");
-          dataFile.print(altitude, 3); dataFile.print(", ");
-          dataFile.print(pressure, 2); dataFile.print(", ");
-          dataFile.print(temperature, 2); dataFile.print(", ");
-          dataFile.print(currAx, 3); dataFile.print(", ");
-          dataFile.print(currAy, 3); dataFile.print(", ");
-          dataFile.print(currAz, 3); dataFile.print(", ");
-          dataFile.print(jerkX, 3); dataFile.print(", ");
-          dataFile.print(jerkY, 3); dataFile.print(", ");
-          dataFile.print(jerkZ, 3); dataFile.println();
-          dataFile.close();
+        dataFile.print(internalClock / 1000.0, 3); dataFile.print(", ");
+        dataFile.print(altitude, 3); dataFile.print(", ");
+        dataFile.print(currAx, 3); dataFile.print(", ");
+        dataFile.print(currAy, 3); dataFile.print(", ");
+        dataFile.print(currAz, 3); dataFile.print(", ");
+        dataFile.print(jerkX, 3); dataFile.print(", ");
+        dataFile.print(jerkY, 3); dataFile.print(", ");
+        dataFile.print(jerkZ, 3); dataFile.println();
+        dataFile.close();
       } else {
-          Serial.println("Failed to open datalog file for writing.");
+        Serial.println("Failed to open datalog file for writing.");
       }
     }
   }
