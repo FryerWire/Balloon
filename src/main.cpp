@@ -58,7 +58,7 @@ unsigned long internalClock = 0;                          // Internal clock for 
 */
 void setup() {
     Serial.begin(115200);
-    while (!Serial) delay(10);
+    // while (!Serial) delay(10);
 
     // Initialize I2C -----------------------------------------------------------------------------
     Wire.begin();

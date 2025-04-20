@@ -13,7 +13,7 @@ from matplotlib import pyplot as plt
 
 # CSV Data Loading and Labeling ===================================================================
 # Read the CSV file and Assign Column Names -------------------------------------------------------
-filename = 'log.csv'
+filename = 'old_sensor_data.csv'
 df = pd.read_csv(filename)
 df.columns = [
     "Time [s]", "Altitude [m]", "Pressure [Pa]", "Temperature [K]",
@@ -143,9 +143,9 @@ plt.tight_layout()
 
 # Altitude vs Jerk X, Y, and Z ----------------------------------------------------------------------------
 plt.figure()
-plt.plot(df["Jerk X [m/s^2]"], df["Altitude [m]"], label = "Jerk X")
-plt.plot(df["Jerk Y [m/s^2]"], df["Altitude [m]"], label = "Jerk Y")
-plt.plot(df["Jerk Z [m/s^2]"], df["Altitude [m]"], label = "Jerk Z")
+plt.plot(df["Jerk X [m/s^3]"], df["Altitude [m]"], label = "Jerk X")
+plt.plot(df["Jerk Y [m/s^3]"], df["Altitude [m]"], label = "Jerk Y")
+plt.plot(df["Jerk Z [m/s^3]"], df["Altitude [m]"], label = "Jerk Z")
 plt.xlabel("Jerk [m/s^3]")
 plt.ylabel("Altitude [m]")
 plt.title("Altitude vs Jerk X, Y, Z")
