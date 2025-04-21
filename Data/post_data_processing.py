@@ -12,8 +12,8 @@ from matplotlib import pyplot as plt
 
 
 # CSV Data Loading and Labeling ===================================================================
-# Read the CSV file and Assign Column Names --------9-----------------------------------------------
-filename = 'Static Data.csv'
+# Read the CSV file and Assign Column Names -------------------------------------------------------
+filename = r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Data\static_data_test.csv"
 df = pd.read_csv(filename)
 df.columns = [
     "Time [s]", "Altitude [m]", "Pressure [Pa]", "Temperature [K]",
@@ -78,7 +78,7 @@ plt.ylabel("Acceleration [m/s^2]")
 plt.title("Time vs Acceleration")
 plt.legend()
 plt.grid()
-plt.tight_layout()
+plt.savefig(r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Images\Time_vs_Acceleration.png")
 
 
 # Time vs Jerk ----------------------------------------------------------------------------
@@ -91,7 +91,7 @@ plt.ylabel("Jerk [m/s^3]")
 plt.title("Time vs Jerk")
 plt.legend()
 plt.grid()
-plt.tight_layout()
+plt.savefig(r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Images\Time_vs_Jerk.png")
 
 
 # Time vs Altitude ----------------------------------------------------------------------------
@@ -101,7 +101,7 @@ plt.xlabel("Time [s]")
 plt.ylabel("Altitude [m]")
 plt.title("Time vs Altitude")
 plt.grid()
-plt.tight_layout()
+plt.savefig(r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Images\Time_vs_Altitude.png")
 
 
 # Altitude vs Measured & Ideal Temperature ----------------------------------------------------------------------------
@@ -113,7 +113,7 @@ plt.ylabel("Altitude [m]")
 plt.title("Altitude vs Temperature (Measured vs Ideal)")
 plt.legend()
 plt.grid()
-plt.tight_layout()
+plt.savefig(r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Images\Altitude_vs_Temperature.png")
 
 
 # Altitude vs Measured & Ideal Pressure ----------------------------------------------------------------------------
@@ -125,7 +125,7 @@ plt.ylabel("Altitude [m]")
 plt.title("Altitude vs Pressure (Measured vs Ideal)")
 plt.legend()
 plt.grid()
-plt.tight_layout()
+plt.savefig(r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Images\Altitude_vs_Pressure.png")
 
 
 # Altitude vs Acceleration X, Y, and Z ----------------------------------------------------------------------------
@@ -138,7 +138,7 @@ plt.ylabel("Altitude [m]")
 plt.title("Altitude vs Accel X, Y, Z")
 plt.legend()
 plt.grid()
-plt.tight_layout()
+plt.savefig(r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Images\Altitude_vs_Acceleration.png")
 
 
 # Altitude vs Jerk X, Y, and Z ----------------------------------------------------------------------------
@@ -151,7 +151,7 @@ plt.ylabel("Altitude [m]")
 plt.title("Altitude vs Jerk X, Y, Z")
 plt.legend()
 plt.grid()
-plt.tight_layout()
+plt.savefig(r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Images\Altitude_vs_Jerk.png")
 
 
 
