@@ -71,6 +71,7 @@ Balloon/
 │   ├── live_serial_monitoring.py
 │   ├── post_data_processing.py
 │   ├── static_data_test.csv
+│   ├── dynamic_data_test.csv
 │   └── README.md
 ├── Documentation/
 │   ├── LaTeX/
@@ -101,6 +102,7 @@ Balloon/
 - `live_serial_monitoring.py`: Real-time serial monitor for incoming sensor data.
 - `post_data_processing.py`: Reads CSV logs, computes statistics, and generates graphs.
 - `static_data_test.csv`: Sample test data for post-processing validation.
+- `dynamic_data_test.csv`: Sample test data for post-processing validation.
 - `README.md`: Explains the purpose and usage of the `Data/` folder.
 
 #### Documentation/

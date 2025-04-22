@@ -9,6 +9,7 @@
 - Added `live_serial_monitoring.py` in the `Data` folder.
 - Added `post_data_processing.py` in the `Data` folder.
 - Added `Images` folder for graphs
+- Added `dynamic_data_test.csv` in the `Data` folder.
 
 ### Changes
 - Reorganized the entire file strucutre.
