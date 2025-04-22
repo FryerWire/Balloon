@@ -6,6 +6,22 @@
 ### Date: 4/21/2025
 
 ### Features
+- NA
+
+### Changes
+- Modified `post_data_processing.py` to have smooth data and colored graphs
+
+### Bug Fixes
+- NA
+
+
+# Balloon Project Documentation Report
+==========================================================================
+
+## Version 4.0.0
+### Date: 4/21/2025
+
+### Features
 - Added `live_serial_monitoring.py` in the `Data` folder.
 - Added `post_data_processing.py` in the `Data` folder.
 - Added `Images` folder for graphs
