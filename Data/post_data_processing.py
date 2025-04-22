@@ -1,4 +1,3 @@
-
 """
 Post processing script for analyzing and visualizing data from a CSV file.
 """
@@ -8,18 +7,20 @@ Post processing script for analyzing and visualizing data from a CSV file.
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+from scipy.ndimage import gaussian_filter1d
 
 
 
 # CSV Data Loading and Labeling ===================================================================
 # Read the CSV file and Assign Column Names -------------------------------------------------------
-filename = r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Data\static_data_test.csv"
+filename = r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Data\dynamic_data_test.csv"
 df = pd.read_csv(filename)
 df.columns = [
     "Time [s]", "Altitude [m]", "Pressure [Pa]", "Temperature [K]",
     "Accel X [m/s^2]", "Accel Y [m/s^2]", "Accel Z [m/s^2]",
     "Jerk X [m/s^3]", "Jerk Y [m/s^3]", "Jerk Z [m/s^3]"
 ]
+
 
 
 # Compute and Print Statistics --------------------------------------------------------------------
@@ -69,45 +70,56 @@ for h in altitudes:
 
 # Data Plotting ===================================================================================
 # Time vs Acceleration ----------------------------------------------------------------------------
-plt.figure()
-plt.plot(df["Time [s]"], df["Accel X [m/s^2]"], label = "Accel X")
-plt.plot(df["Time [s]"], df["Accel Y [m/s^2]"], label = "Accel Y")
-plt.plot(df["Time [s]"], df["Accel Z [m/s^2]"], label = "Accel Z")
-plt.xlabel("Time [s]")
-plt.ylabel("Acceleration [m/s^2]")
-plt.title("Time vs Acceleration")
-plt.legend()
-plt.grid()
+fig, axs = plt.subplots(3, 1, figsize = (10, 8), sharex = True)
+for i, (axis, color) in enumerate(zip(['X', 'Y', 'Z'], ['blue', 'green', 'orange'])):
+    raw = df[f"Accel {axis} [m/s^2]"]
+    smooth = gaussian_filter1d(raw, sigma = 2)
+    axs[i].scatter(df["Time [s]"], raw, alpha = 0.3, s = 10, color = "gray", label = f"Accel {axis} (raw)")
+    axs[i].plot(df["Time [s]"], smooth, color = color, label = f"Accel {axis} (smooth)")
+    axs[i].set_ylabel(f"A{axis} [m/s^2]")
+    axs[i].legend()
+    axs[i].grid()
+axs[-1].set_xlabel("Time [s]")
+fig.suptitle("Time vs Acceleration")
 plt.savefig(r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Images\Time_vs_Acceleration.png")
 
 
 # Time vs Jerk ----------------------------------------------------------------------------
-plt.figure()
-plt.plot(df["Time [s]"], df["Jerk X [m/s^3]"], label = "Jerk X")
-plt.plot(df["Time [s]"], df["Jerk Y [m/s^3]"], label = "Jerk Y")
-plt.plot(df["Time [s]"], df["Jerk Z [m/s^3]"], label = "Jerk Z")
-plt.xlabel("Time [s]")
-plt.ylabel("Jerk [m/s^3]")
-plt.title("Time vs Jerk")
-plt.legend()
-plt.grid()
+fig, axs = plt.subplots(3, 1, figsize = (10, 8), sharex = True)
+for i, (axis, color) in enumerate(zip(['X', 'Y', 'Z'], ['blue', 'green', 'orange'])):
+    raw = df[f"Jerk {axis} [m/s^3]"]
+    smooth = gaussian_filter1d(raw, sigma = 2)
+    axs[i].scatter(df["Time [s]"], raw, alpha = 0.3, s = 10, color = "gray", label = f"Jerk {axis} (raw)")
+    axs[i].plot(df["Time [s]"], smooth, color = color, label = f"Jerk {axis} (smooth)")
+    axs[i].set_ylabel(f"J{axis} [m/s^3]")
+    axs[i].legend()
+    axs[i].grid()
+axs[-1].set_xlabel("Time [s]")
+fig.suptitle("Time vs Jerk")
 plt.savefig(r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Images\Time_vs_Jerk.png")
 
 
 # Time vs Altitude ----------------------------------------------------------------------------
 plt.figure()
-plt.plot(df["Time [s]"], df["Altitude [m]"])
+raw = df["Altitude [m]"]
+smooth = gaussian_filter1d(raw, sigma = 2)
+plt.scatter(df["Time [s]"], raw, alpha = 0.3, s = 10, color = "gray", label = "Raw")
+plt.plot(df["Time [s]"], smooth, label = "Smoothed")
 plt.xlabel("Time [s]")
 plt.ylabel("Altitude [m]")
 plt.title("Time vs Altitude")
+plt.legend()
 plt.grid()
 plt.savefig(r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Images\Time_vs_Altitude.png")
 
 
 # Altitude vs Measured & Ideal Temperature ----------------------------------------------------------------------------
 plt.figure()
-plt.plot(df["Temperature [K]"], df["Altitude [m]"], label = "Measured")
-plt.plot(ideal_T, df["Altitude [m]"], label = "Ideal", linestyle = '--')
+raw = df["Temperature [K]"]
+smooth = gaussian_filter1d(raw, sigma = 2)
+plt.scatter(raw, df["Altitude [m]"], alpha = 0.3, s = 10, color = "gray", label = "Measured (raw)")
+plt.plot(smooth, df["Altitude [m]"], label = "Measured (smoothed)")
+plt.plot(ideal_T, df["Altitude [m]"], label = "Ideal", linestyle = "--")
 plt.xlabel("Temperature [K]")
 plt.ylabel("Altitude [m]")
 plt.title("Altitude vs Temperature (Measured vs Ideal)")
@@ -118,8 +130,11 @@ plt.savefig(r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Imag
 
 # Altitude vs Measured & Ideal Pressure ----------------------------------------------------------------------------
 plt.figure()
-plt.plot(df["Pressure [Pa]"], df["Altitude [m]"], label = "Measured")
-plt.plot(ideal_P, df["Altitude [m]"], label = "Ideal", linestyle = '--')
+raw = df["Pressure [Pa]"]
+smooth = gaussian_filter1d(raw, sigma = 2)
+plt.scatter(raw, df["Altitude [m]"], alpha = 0.3, s = 10, color = "gray", label = "Measured (raw)")
+plt.plot(smooth, df["Altitude [m]"], label = "Measured (smoothed)")
+plt.plot(ideal_P, df["Altitude [m]"], label = "Ideal", linestyle = "--")
 plt.xlabel("Pressure [Pa]")
 plt.ylabel("Altitude [m]")
 plt.title("Altitude vs Pressure (Measured vs Ideal)")
@@ -129,28 +144,30 @@ plt.savefig(r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Imag
 
 
 # Altitude vs Acceleration X, Y, and Z ----------------------------------------------------------------------------
-plt.figure()
-plt.plot(df["Accel X [m/s^2]"], df["Altitude [m]"], label = "Accel X")
-plt.plot(df["Accel Y [m/s^2]"], df["Altitude [m]"], label = "Accel Y")
-plt.plot(df["Accel Z [m/s^2]"], df["Altitude [m]"], label = "Accel Z")
-plt.xlabel("Acceleration [m/s^2]")
-plt.ylabel("Altitude [m]")
-plt.title("Altitude vs Accel X, Y, Z")
-plt.legend()
-plt.grid()
+fig, axs = plt.subplots(3, 1, figsize = (10, 8), sharex = True)
+for i, (axis, color) in enumerate(zip(['X', 'Y', 'Z'], ['blue', 'green', 'orange'])):
+    raw = df[f"Accel {axis} [m/s^2]"]
+    smooth = gaussian_filter1d(raw, sigma = 2)
+    axs[i].scatter(raw, df["Altitude [m]"], alpha = 0.3, s = 10, color = color, label = f"Accel {axis} (raw)")
+    axs[i].set_ylabel("Altitude [m]")
+    axs[i].legend()
+    axs[i].grid()
+axs[-1].set_xlabel("Acceleration [m/s^2]")
+fig.suptitle("Altitude vs Acceleration")
 plt.savefig(r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Images\Altitude_vs_Acceleration.png")
 
 
 # Altitude vs Jerk X, Y, and Z ----------------------------------------------------------------------------
-plt.figure()
-plt.plot(df["Jerk X [m/s^3]"], df["Altitude [m]"], label = "Jerk X")
-plt.plot(df["Jerk Y [m/s^3]"], df["Altitude [m]"], label = "Jerk Y")
-plt.plot(df["Jerk Z [m/s^3]"], df["Altitude [m]"], label = "Jerk Z")
-plt.xlabel("Jerk [m/s^3]")
-plt.ylabel("Altitude [m]")
-plt.title("Altitude vs Jerk X, Y, Z")
-plt.legend()
-plt.grid()
+fig, axs = plt.subplots(3, 1, figsize = (10, 8), sharex = True)
+for i, (axis, color) in enumerate(zip(['X', 'Y', 'Z'], ['blue', 'green', 'orange'])):
+    raw = df[f"Jerk {axis} [m/s^3]"]
+    smooth = gaussian_filter1d(raw, sigma = 2)
+    axs[i].scatter(raw, df["Altitude [m]"], alpha = 0.3, s = 10, color = color, label = f"Jerk {axis} (raw)")
+    axs[i].set_ylabel("Altitude [m]")
+    axs[i].legend()
+    axs[i].grid()
+axs[-1].set_xlabel("Jerk [m/s^3]")
+fig.suptitle("Altitude vs Jerk")
 plt.savefig(r"C:\Users\maxwe\OneDrive\Documents\PlatformIO\Projects\Balloon\Images\Altitude_vs_Jerk.png")
 
 
