@@ -12,8 +12,8 @@
 \titleformat{\chapter}[display]
   {\normalfont\bfseries}{}{0pt}{\LARGE}
 
-\title{Balloon Project Codebase Documentation}
-\author{Names:}
+\title{Title}
+\author{}
 \date{\today}
 
 \setlength{\parindent}{0pt}
@@ -22,57 +22,106 @@
 
 \maketitle
 
+Text
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+Text
+
 \tableofcontents
 
+\chapter*{Introduction}
+\addcontentsline{toc}{chapter}{Introduction}
+Text
 
+\chapter*{Method}
+\addcontentsline{toc}{chapter}{Method}
+Text
+
+\chapter*{Results}
+\addcontentsline{toc}{chapter}{Results}
+Text
+
+\chapter*{Discussion}
+\addcontentsline{toc}{chapter}{Discussion}
+Text
+
+\chapter*{Conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}
+Text
 
 % Overview ========================================================================================
 \chapter*{Overview}
 \addcontentsline{toc}{chapter}{Overview}
-
 The balloon project was created in VSCode using the PlatformIO (PIO) extension along with LaTeX using the Strawberry Perl and MaTeX extensions for live rendering of LaTeX PDFs. There are two primary coding languages involved in this project. The first is C++, which was used to write the codebase for the Adafruit Clue nRF52840 microcontroller. This board utilizes the BMP280 and LSM6DS33 sensors to measure altitude, pressure, and temperature, while the LSM6DS33 also provides accelerometer data to calculate the rate of change in acceleration, also known as jerk. \newline
-
 There are two primary objectives of this project:
-
 \begin{enumerate}
     \item Measure the rate of change of acceleration (jerk) using the LSM6DS33 accelerometer.
     \item Compare the temperature, pressure, and altitude data from the BMP280 to the ideal standard atmospheric data.
 \end{enumerate}
-
 Python was used to write the post-processing scripts, which output standard statistical measurements such as mean, standard deviation, variance, and others. This portion of the code also generates various graphs showing relationships such as time vs. altitude, time vs. jerk, and altitude vs. acceleration. \newline
-
 Regarding the Clue board itself, when the chip detects a change in acceleration, it writes data to a CSV file and outputs different LED light colors based on jerk values. The C++ portion can be described as the \textbf{Data Acquisition} portion, and the Python portion can be described as the \textbf{Post-Processing} portion. \newline
-
 The board contains onboard storage (2MB QSPI Flash), and outputs include the NeoPixel RGB LEDs and data being written to QSPI Flash. An additional file required is the CircuitPython driver \texttt{adafruit-circuitpython-clue\_nrf52840\_express-en\_US-9.2.7.uf2}, which is used to access the data stored on the Flash.
-
-
 
 % Code Documentation ==============================================================================
 \chapter{Code Documentation}
 
-
 % Codebase Structure ------------------------------------------------------------------------------
 \section{Codebase Structure}
-
-The project is divided into the following main folders:
-
+The codebase is organized into several folders, each serving a specific purpose. The main folder structure is as follows:
 \begin{itemize}
-    \item \texttt{src}
-    \item \texttt{Data}
-    \item \texttt{Documentation}
-    \item \texttt{Images}
-    \item \texttt{Utilities}
+    \item \texttt{Balloon/}
+    \begin{itemize}
+      \item \texttt{Data/}
+      \begin{itemize}
+        \item \texttt{live\_serial\_monitoring.py}
+        \item \texttt{post\_data\_processing.py}
+        \item \texttt{static\_data\_test.csv}
+        \item \texttt{dynamic\_data\_test.csv}
+        \item \texttt{README.md}
+      \end{itemize}
+      \item \texttt{Documentation/}
+      \begin{itemize}
+        \item \texttt{LaTeX/}
+        \begin{itemize}
+          \item \texttt{docs.aux}
+          \item \texttt{docs.fdb\_latexmk}
+          \item \texttt{docs.fls}
+          \item \texttt{docs.log}
+          \item \texttt{docs.pdf}
+          \item \texttt{docs.synctex.gz}
+          \item \texttt{docs.tex}
+          \item \texttt{README.md}
+        \end{itemize}
+        \item \texttt{changelog.txt}
+        \item \texttt{README.md}
+      \end{itemize}
+      \item \texttt{Images/}
+      \begin{itemize}
+        \item \texttt{image.png}
+        \item \texttt{README.md}
+      \end{itemize}
+      \item \texttt{src/}
+      \begin{itemize}
+        \item \texttt{main.cpp}
+        \item \texttt{testing.exe}
+        \item \texttt{README.md}
+      \end{itemize}
+      \item \texttt{Utilities/}
+      \begin{itemize}
+        \item \texttt{adafruit-circuitpython-clue\_nrf52840\_express-en\_US-9.2.7.uf2}
+        \item \texttt{README.md}
+      \end{itemize}
+    \end{itemize}
 \end{itemize}
-
 
 % src  --------------------------------------------------------------------------------------------
 \section{\texttt{src}}
 
-
 % main.cpp ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \subsection{\texttt{main.cpp}}
 
-The \texttt{src} folder contains the \texttt{main.cpp} file, which serves as the core of the program that operates the ClueBoard. At the beginning of this file, seven external libraries are included to support sensor readings, LED control, communication, and data logging:
+The \texttt{src} folder contains the \texttt{main.cpp} file, which serves as the core of the program that operates the Clue board. At the beginning of this file, seven external libraries are included to support sensor readings, LED control, communication, and data logging:
 
 \begin{enumerate}
     \item \textbf{Adafruit\_LSM6DS33.h:} Used to collect data from the LSM6DS33 6-DOF accelerometer and gyroscope.
@@ -84,13 +133,10 @@ The \texttt{src} folder contains the \texttt{main.cpp} file, which serves as the
     \item \textbf{Adafruit\_FlashTransport.h:} Handles low-level data transport between the processor and the flash memory.
 \end{enumerate}
 
-
 % Function Prototypes +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \subsubsection*{Function Prototypes}
 
 The next section in \texttt{main.cpp} is the \textbf{Function Prototypes} header. This section declares all the functions before they are used in the \texttt{setup()} and \texttt{loop()} functions. The purpose of doing this is to keep \texttt{setup()} and \texttt{loop()} near the top of the file for easier readability and quick access. \\
-
-
 
 % Global Objects and Variables ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \subsubsection*{Global Objects and Variables}
@@ -101,53 +147,32 @@ Following that is the \textbf{Global Variables} header. This section defines the
 
 Another key item defined in this header is the internal clock. This is an \texttt{unsigned long} variable, capable of storing large non-negative values, and is used to keep track of elapsed time on the board in milliseconds. \\
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 % Setup +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \subsection*{setup()}
 
-The next section of the \texttt{main.cpp} file is the \texttt{setup()} function. This is where the I2C bus routes, the BMP280, the LSM6DS33, and the NeoPixel are all initialized. The accelerometer's range and data rate are configured, and the NeoPixel is started with no LEDs turned on. At the beginning of the function, \texttt{Serial.begin(115200)} is called to set up the serial communication between the board and the computer. This is used for printing data for debugging or monitoring. The portion of code that is commented out is meant for live serial data monitoring using the VSCode PlatformIO Serial Monitor. By keeping this section commented out, it allows the program to log data directly to the flash storage instead. \newline
+The next section of the \texttt{main.cpp} file is the \texttt{setup()} function. This is where the I\textsuperscript{2}C bus routes, the BMP280, the LSM6DS33, and the NeoPixel are all initialized. The accelerometer's range and data rate are configured, and the NeoPixel is started with no LEDs turned on. At the beginning of the function, \texttt{Serial.begin(115200)} is called to set up the serial communication between the board and the computer. This is used for printing data for debugging or monitoring. The portion of code that is commented out is meant for live serial data monitoring using the VSCode PlatformIO Serial Monitor. By keeping this section commented out, it allows the program to log data directly to the flash storage instead. \newline
 
-After setting up the serial communication, the I2C bus and sensor communication channels are initialized to ensure proper data flow between the sensors and the board. The code includes sensor checks that confirm whether the LSM6DS33, BMP280, NeoPixel, and QSPI flash have been successfully initialized. If any of these checks fail, a warning message is printed to indicate the lack of communication. Additionally, the FAT filesystem is mounted on the QSPI flash. Since the Clue board lacks the ability to delete existing data through a UI, the \texttt{setup()} function clears any previously stored data to ensure that there is sufficient space for a new recording session. This is important for avoiding data loss during the final experiment. \newline
+After setting up the serial communication, the I\textsuperscript{2}C bus and sensor communication channels are initialized to ensure proper data flow between the sensors and the board. The code includes sensor checks that confirm whether the LSM6DS33, BMP280, NeoPixel, and QSPI flash have been successfully initialized. If any of these checks fail, a warning message is printed to indicate the lack of communication. Additionally, the FAT filesystem is mounted on the QSPI flash. Since the Clue board lacks the ability to delete existing data manually, the \texttt{setup()} function clears any previously stored data to ensure that there is sufficient space for a new recording session. This is important for avoiding data loss during the final experiment. \newline
 
 The final portion of the \texttt{setup()} function writes the CSV header row to the flash file. This header includes the time, pressure, altitude, temperature, acceleration, and jerk, and sets up the file structure for consistent logging in the \texttt{loop()}.
 
-
-
-
-
-
-
 % Loop ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \subsection*{loop()}
-
-Now analyzing the \texttt{loop()} function---this is the core of the program. The \texttt{loop()} continuously updates the accelerometer data, computes the jerk, and controls the NeoPixels based on those jerk values. When live serial monitoring is enabled, the function logs data to the Serial Monitor in real-time. Otherwise, it records data to flash storage at a frequency of 1~Hz (once every second). \newline
+Now analyzing the \texttt{loop()} function, this is the core of the program. The \texttt{loop()} continuously updates the accelerometer data, computes the jerk, and controls the NeoPixels based on those jerk values. When live serial monitoring is enabled, the function logs data to the Serial Monitor in real-time. Otherwise, it records data to flash storage at a frequency of 1~Hz (once every second). \newline
 
 To prevent rapid or excessive LED color changes, a threshold of 1.0~m/s\textsuperscript{3} was introduced. Only when the computed jerk exceeds this threshold does the NeoPixel LED change color. \newline
 
-At the beginning of this function, several \texttt{unsigned long} variables are declared---specifically \texttt{const} and \texttt{static} types. The \texttt{const} variable sets a fixed time interval for updates, while the \texttt{static} variables serve as persistent time trackers within the loop. These are used to implement internal timing for jerk calculations. \newline
+At the beginning of this function, several \texttt{unsigned long} variables are declared, specifically \texttt{const} and \texttt{static} types. The \texttt{const} variable sets a fixed time interval for updates, while the \texttt{static} variables serve as persistent time trackers within the loop. These are used to implement internal timing for jerk calculations. \newline
 
 The next section of the loop retrieves altitude, pressure, and temperature data from the sensors. These values are then stored into four-point history buffers used for jerk computation. Because the data is sampled at 1~Hz, the program waits at least four seconds to collect four data points before attempting any jerk calculation. \newline
 
-Once enough data is available, the \texttt{computeJerk()} function is called to calculate the rate of change of acceleration in the X, Y, and Z directions. If the computed jerk in any axis exceeds the 1.0~m/s\textsuperscript{3} threshold, the NeoPixel LED is activated and displays a color corresponding to the axis in which the threshold was breached. \newline
+Once enough data is available, the \texttt{computeJerk()} function is called to calculate the rate of change of acceleration in the X, Y, and Z directions. If the computed jerk in any axis exceeds the 1.0~m/s\textsuperscript{3} threshold, the NeoPixel LED is activated and displays a color corresponding to the axis in which the threshold was surpassed. \newline
 
 Jerk thresholds:
 \begin{center}
 \begin{tabular}{|c|c|c|}
 \hline
-\textbf{Axis} & \textbf{Jerk < 0} & \textbf{Jerk > 0} \\
+\textbf{Axis} & \textbf{Jerk \textless\ 0} & \textbf{Jerk \textgreater\ 0} \\
 \hline
 X & Blue & Red \\
 Y & Yellow & Green \\
@@ -158,40 +183,24 @@ Z & White & Purple \\
 
 If no jerk value in the X, Y, or Z direction exceeds the threshold, the LED turns black to indicate an off state. After this, the collected data, including the internal clock, altitude, pressure, temperature, acceleration (X, Y, Z), and jerk (X, Y, Z), is printed to the CSV file.
 
-
-
-
 \subsubsection*{scanI2Devices()}
-Beginning with the utility function \texttt{scanI2Devices()}, this function scans the I2C bus for connected devices and enables proper communication with them. It begins by checking for the presence of I2C devices at various addresses. If no error is returned (error code 0), an I2C device is found and can be communicated with. If the error code is 4, it indicates an unknown address or communication failure. If the variable \texttt{nDevices} is 0, it means no I2C devices were detected on the bus.
-
+Beginning with the utility function \texttt{scanI2Devices()}, this function scans the I\textsuperscript{2}C bus for connected devices and enables proper communication with them. It begins by checking for the presence of I\textsuperscript{2}C devices at various addresses. If no error is returned (error code 0), an I\textsuperscript{2}C device is found and can be communicated with. If the error code is 4, it indicates an unknown address or communication failure. If the variable \texttt{nDevices} is 0, it means no I\textsuperscript{2}C devices were detected on the bus.
 
 \subsubsection*{getAltitude()}
-The next utility function is \texttt{getAltitude()}. This function reads the current altitude from the BMP280 barometric pressure sensor. It calculates altitude using a hardcoded reference sea level pressure of 101{,}325 Pascals, which represents the ideal atmospheric pressure at sea level. This assumption allows the function to convert the measured pressure into an estimated altitude above sea level using standard atmospheric models.
-
+The next utility function is \texttt{getAltitude()}. This function reads the current altitude from the BMP280 barometric pressure sensor. It calculates altitude using a hardcoded reference sea level pressure of 101{,}325 Pascals, which represents the ideal atmospheric pressure at sea level. This assumption allows the function to convert the measured pressure into an estimated altitude above sea level using the ideal standard atmosphere calculations.
 
 \subsubsection*{getAcceleration()}
 The next utility function is \texttt{getAcceleration()}, which reads acceleration data from the LSM6DS33 sensor. It captures the current acceleration in the X, Y, and Z directions and updates the corresponding global variables. These values are then
 
-
 \subsubsection*{updateAccelHistory()}
 The next function is \texttt{updateAccelHistory()}, which manages the four-point acceleration history used for jerk calculation. It shifts the previously stored acceleration values back by one index, making room for the newest value. The most recent acceleration reading is then stored in the front of the array, ensuring that the history remains up to date for accurate derivative computations.
-
 
 \subsubsection*{computeJerk()}
 The last utility function is \texttt{computeJerk()}, which calculates the jerk, defined as the rate of change of acceleration. This function uses the four-point acceleration history to compute the numerical derivative for each axis (X, Y, and Z). The resulting jerk values are then passed to the global variables, allowing the \texttt{loop()} function to make decisions based on sudden changes in motion, such as triggering LED responses.
 
-
-
-
-
-
-
-
-
 \section{Data}
 
 \subsection{\texttt{live\_serial\_monitoring.py}}
-
 The purpose of this file is to enable live debugging of the microcontroller. It monitors the serial output from the board, captures the data in real time, and converts it into a CSV format for easier analysis. This script is primarily used to test the functionality of the code during development and ensure that sensor readings and calculations are being processed correctly.
 
 \subsection{\texttt{post\_data\_processing.py}}
@@ -204,10 +213,8 @@ After this, the script generates a series of plots. Each plot overlays smoothed 
 
 
 \section{Documentation}
-
 \subsection{\texttt{changelog.txt}}
 This file is used to document changes made throughout the codebase. It serves as a changelog, keeping track of updates, bug fixes, and feature additions. These updates are reflected in the version history and are synchronized with the repository on GitHub.
-
 
 \subsection{\texttt{LaTeX}}
 This folder is used to store the engine files required to render LaTeX documents as PDFs. Files such as \texttt{docs.aux}, \texttt{docs.fdb\_latexmk}, \texttt{docs.fls}, \texttt{docs.log}, and \texttt{docs.synctex.gz} are automatically generated during the LaTeX compilation process and should not be modified. These engine files are responsible for compiling the LaTeX source into a live-updating PDF. \\
@@ -218,14 +225,8 @@ The two important files in this folder are \texttt{docs.tex} and \texttt{docs.pd
 
 This folder is used to store all the graphs generated by the \texttt{post\_data\_processing.py} script. Any plot created during the post-processing phase is automatically compiled and saved to this directory. It serves as a centralized location for visual outputs, making it easy to access and include figures in documentation or reports.
 
-
-
-
 \section{Utilities}
 This file contains the driver used to extract flash data from the Clue board. The file \texttt{adafruit-circuitpython-clue\_nrf52840\_express-en\_US-9.2.7.uf2} is dragged into the boot directory when the Clue board is connected and enters boot mode. Once loaded, it allows access to the internal storage, enabling the extraction of logged data from the device.
-
-
-
 
 \chapter{Hardware}
 The microcontroller used in this project is the \textbf{Adafruit Clue nRF52840}, which features a 64~MHz Cortex-M4 processor and 1~MB of flash memory for code storage.
@@ -242,8 +243,6 @@ For onboard storage, the project utilizes \textbf{2~MB of QSPI Flash}, which is 
 
 The primary output device is the \textbf{NeoPixel RGB LED}, which visually responds to changes in jerk (rate of acceleration change).
 
-
-
 \chapter{Software Requirements}
 The software tools used in this project include \textbf{PlatformIO} for embedded development, \textbf{Python} for post-processing and analysis, \textbf{C++} for firmware programming, and \textbf{LaTeX} for technical documentation. Additionally, the \textbf{MaTeX} and \textbf{Strawberry Perl} extensions are used to enable live rendering of LaTeX documents within the development environment.
 
@@ -258,10 +257,4 @@ The following libraries are utilized within the PlatformIO project configuration
     \item \texttt{adafruit/Adafruit SPIFlash@\^{}5.1.1}
 \end{itemize}
 
-
 \end{document}
-
-
-
-
-
